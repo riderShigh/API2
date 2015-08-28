@@ -26,22 +26,6 @@ div.pseudobox{
 }
 </style>
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
-<script>
-
-    $(function() {
-
-
-   var people = [];
-
-   $.getJSON('champStats.json', function(data) {
-         var tblRow = "<tr>" + "<td>" + data.win.mains + "</td>" +
-          "<td>" + data.win.avg + "</td>" + "<td>" + data.lose.mains + "</td>" + "<td>" + data.lose.avg + "</td>" + "</tr>";
-          $(tblRow).appendTo("#userdata tbody");
-     });
-
-});
-</script>
 
 </head>
 
@@ -57,21 +41,38 @@ div.pseudobox{
 <p id='midFrame'> </p>
 </div>
 
-<div class="wrapper">
-<div class="profile">
-<table id= "userdata" border="2">
-  <thead>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email Address</th>
-            <th>City</th>
-        </thead>
-      <tbody>
+<div id="result" style="color:red"></div>
+<div id="id01"></div>
 
-       </tbody>
-   </table>
-  </div>
- </div>
+<script type='text/javascript'>
+var xmlhttp = new XMLHttpRequest();
+var url = "https://raw.githubusercontent.com/riderShigh/API2/master/statsCompare/5.11/1/champStats.json";
+
+xmlhttp.onreadystatechange=function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        myFunction(xmlhttp.responseText);
+    }
+}
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+function myFunction(response) {
+    var arr = JSON.parse(response);
+    var i;
+    var out = "<table>";
+
+    out += "<tr><td>" +
+        arr.KDA.win.mains +
+        "</td><td>" +
+        arr.KDA.win.avg +
+        "</td><td>" +
+        arr.KDA.lose.mains +
+        "</td></tr>";
+
+    out += "</table>";
+    document.getElementById("id01").innerHTML = out;
+}
+</script>-
 
 <div id='footer'>
 [The title of your Project] isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends (c) Riot Games, Inc.
