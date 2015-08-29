@@ -10,9 +10,13 @@ for key,value in mageList.iteritems():
 	writeText = baseText.replace('Katarina',value);
 	champName = value.replace(" ","");
 	champName = champName.replace("'","");
-	if champName == 'Fiddlesticks': champName == 'FiddleSticks';
-	if champName == 'ChoGath': champName == 'Chogath';
-	if champName == 'LeBlanc': champName == 'Leblanc';
+	champName = champName.lower();
+	champName = champName[0].upper() + champName[1:];
+
+	if champName == 'Fiddlesticks': champName = 'FiddleSticks';
+	if champName == 'Kogmaw': champName = 'KogMaw';
+	if champName == 'Twistedfate': champName = 'TwistedFate';
+	print champName;
 
 	writeText = writeText.replace('/1/champStats.json','/'+key+'/champStats.json');
 
