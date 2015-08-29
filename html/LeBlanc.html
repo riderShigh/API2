@@ -35,7 +35,7 @@ body{
 	clear: both;
 }
 div.background{
-	background-image: url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/LeBlanc_1.jpg) ;
+	background-image: url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/Leblanc_1.jpg) ;
 	background-repeat: no-repeat;
 	background-size: cover;
 	box-shadow: inset 0px 0px 15px 15px rgba(0,0,0,1);
@@ -73,10 +73,10 @@ div.pseudobox2{
 <div class='transbox'>
 <div class='pseudobox'>
 <div id='header'>
-<h1>LeBlanc</h1>
+<h1>Leblanc</h1>
 </div>
 <div id='loadingPic'>
-<img src='http://ddragon.leagueoflegends.com/cdn/img/champion/loading/LeBlanc_0.jpg' style='border:none'></img>
+<img src='http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Leblanc_0.jpg' style='border:none'></img>
 <p id='midFrame'> </p>
 </div>
 <div class='pseudobox2'>
@@ -120,16 +120,20 @@ function plot(response1,response2){
 
 	var arr = JSON.parse(response1);
 	var arr2 = JSON.parse(response2);
+	var oldavg = arr.gamesWon.avg/arr.gamesRecorded.avg*100;
+	var oldmains = arr.gamesWon.mains/arr.gamesRecorded.mains*100;
+	var newavg = arr2.gamesWon.avg/arr2.gamesRecorded.avg*100;
+	var newmains = arr2.gamesWon.mains/arr2.gamesRecorded.mains*100;
 	
 	google.setOnLoadCallback(drawStacked);
 	
 	function drawStacked() {
       var data = google.visualization.arrayToDataTable([
-        ['Games Played', 'Wins', 'Loses'],
-        ['5.11 Avg', arr.gamesWon.avg, arr.gamesRecorded.avg-arr.gamesWon.avg],
-		['5.11 Mains', arr.gamesWon.mains, arr.gamesRecorded.mains-arr.gamesWon.mains],
-		['5.14 Avg', arr2.gamesWon.avg, arr2.gamesRecorded.avg-arr2.gamesWon.avg],
-		['5.14 Mains', arr2.gamesWon.mains, arr2.gamesRecorded.mains-arr2.gamesWon.mains],
+        ['Games Played', 'Wins', 'Loses',{role:'annotation'}],
+        ['5.11 Avg', arr.gamesWon.avg, arr.gamesRecorded.avg-arr.gamesWon.avg, oldavg.toString()],
+		['5.11 Mains', arr.gamesWon.mains, arr.gamesRecorded.mains-arr.gamesWon.mains, oldmains.toString()],
+		['5.14 Avg', arr2.gamesWon.avg, arr2.gamesRecorded.avg-arr2.gamesWon.avg, newavg.toString()],
+		['5.14 Mains', arr2.gamesWon.mains, arr2.gamesRecorded.mains-arr2.gamesWon.mains, newmains.toString()],
 		
       ]);
 

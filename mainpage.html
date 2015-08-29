@@ -53,7 +53,6 @@
 				
 				for(var key in mageList){
 					var champName = mageList[key];
-					var champName2 = mageList[key];
 					champName = champName.replace(/\s+/g,'');
 					champName = champName.replace(/\'/g,'');
 					champName = champName.toLowerCase();
@@ -62,7 +61,6 @@
 					if(champName=='Kogmaw'){champName = 'KogMaw'};
 					if(champName=='Fiddlesticks'){champName = 'FiddleSticks'};
 					champList.push(champName);
-					champList2.push(champName2);
 				}
 				
 				champList = champList.sort();
