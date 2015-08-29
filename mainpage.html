@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			body{
+				background-color: #000000;
+				scrollbar-base-color: #000000;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div class='midframe'>
+			<iframe src='http://rawgit.com/riderShigh/API2/master/html/Annie.html' align='middle' style="border:none" width=1215px height=717px>
+				
+			</iframe>
+		</div>
+	</body>
+	
+	<nav>
+
+		<div id='id01'>
+			<img src='http://ddragon.leagueoflegends.com/cdn/5.16.1/img/champion/Akali.png'>
+			</img>
+		</div>
+	
+		<script type='text/javascript'>
+			var xmlhttp = new XMLHttpRequest();
+			var url = "https://raw.githubusercontent.com/riderShigh/API2/master/mages.json";
+
+			xmlhttp.onreadystatechange=function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					getMageListIcons(xmlhttp.responseText);
+				}
+			}
+			xmlhttp.open("GET", url, true);
+			xmlhttp.send();
+			
+			function getMageListIcons(response){
+				var out = '';
+				var mageList = JSON.parse(response);
+				var lineSkip = 0;
+				var champList = [];
+				
+				for(var key in mageList){
+					var champName = mageList[key]
+					champName = champName.replace(/\s+/g,'');
+					champName = champName.replace(/\'/g,'');
+					champName = champName.toLowerCase();
+					champName = champName.charAt(0).toUpperCase() + champName.slice(1);
+					if(champName=='Twistedfate'){champName = 'TwistedFate'};
+					if(champName=='Kogmaw'){champName = 'KogMaw'};
+					if(champName=='Fiddlesticks'){champName = 'FiddleSticks'};
+					champList.push(champName);
+				}
+				
+				champList = champList.sort();
+				
+				for(var c=0; c<champList.length; c++){
+					var iconUrl = '"http://ddragon.leagueoflegends.com/cdn/5.16.1/img/champion/' + champList[c] +'.png"';
+					out += "<img src=" + iconUrl + " width='60px'></img>  ";
+					//out += "<img src='http://ddragon.leagueoflegends.com/cdn/5.16.1/img/champion/FiddleSticks.png'></img>";
+					//out += iconUrl +'<br>';
+					//out += champName + '<br>';
+					
+				}
+				document.getElementById('id01').innerHTML = out;
+			}
+			
+		</script>
+	
+
+	</nav>
+</html>
