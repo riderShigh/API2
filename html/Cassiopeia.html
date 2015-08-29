@@ -7,6 +7,8 @@ img{
 }
 body{
 	background-color: #000000;
+	margin: 0;
+	padding: 0;
 }
 #header{
 	text-align:center;
@@ -17,7 +19,11 @@ body{
 }
 #stats{
 	float: left;
-	padding: 25px;
+	padding: 45px;
+}
+#stats2{
+	float: left;
+	padding: 45px;
 }
 #footer{
 	clear: both;
@@ -25,19 +31,32 @@ body{
 div.background{
 	background-image: url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/Cassiopeia_1.jpg) ;
 	background-repeat: no-repeat;
-	background-size: cover;
+	background-size: 1215px 717px;
 	box-shadow: inset 0px 0px 15px 15px rgba(0,0,0,1);
+	margin-top: 0px;
 }
 div.transbox{
 	background-color: #ffffff;
 	opacity: 0.8;
-	margin: 80px 100px;
+	margin-left: 97px;
+	width: 1020px;
+	height: 80%;
 	box-shadow: 0px 0px 15px 15px rgba(0,0,0,1);
 }
 div.pseudobox{
-	margin: 50px;
+	margin-left: 97px;
+}
+div.pseudobox2{
+	margin-left: 325px;
+	<!--background-color: #000000;-->
 }
 </style>
+
+<!--div.textwrap{
+	background-color: #ffffff;
+	opacity: 0.5;
+}
+</style>-->
 
 
 </head>
@@ -53,33 +72,109 @@ div.pseudobox{
 <img src='http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Cassiopeia_0.jpg' style='border:none'></img>
 <p id='midFrame'> </p>
 </div>
-
+<div class='pseudobox2'>
+<h1>Patch 5.11</h1>
 <div id="stats"></div>
+<br>
+<h1>Patch 5.14</h1>
+<div id="stats2"></div>
+</div>
 
 <script type='text/javascript'>
 var xmlhttp = new XMLHttpRequest();
+var xmlhttp2 = new XMLHttpRequest(); 
 var url = "https://raw.githubusercontent.com/riderShigh/API2/master/statsCompare/5.11/69/champStats.json";
+var url2 = "https://raw.githubusercontent.com/riderShigh/API2/master/statsCompare/5.14/69/champStats.json";
 
 xmlhttp.onreadystatechange=function() {
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-        myFunction(xmlhttp.responseText);
-    }
+	if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+		myFunction(xmlhttp.responseText,"stats");
+		//myFunction(xmlhttp.responseText);
+	}
 }
 xmlhttp.open("GET", url, true);
 xmlhttp.send();
 
-function myFunction(response) {
-    var arr = JSON.parse(response);
-    var i;
-    var out = "<table>";
+xmlhttp2.onreadystatechange=function() {
+	if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
+		myFunction(xmlhttp2.responseText,"stats2");
+		//myFunction(xmlhttp2.responseText);
+	}
+}
+xmlhttp2.open("GET", url2, true);
+xmlhttp2.send();
 
-	out += "<tr><td>" + arr.KDA.win.mains.toFixed(2) + "</td>";
-	out += "<td>" + arr.KDA.win.avg.toFixed(2) + "</td>";
-	out += "<td>" + arr.KDA.lose.mains.toFixed(2) + "</td></tr>";
+
+function myFunction(response,statsFrame) {
+    var arr = JSON.parse(response);
 	
+	var out0 = "<table><col width='130px'><col width='130px'><col width='130px'>";
+	
+	out0 += "<th></th><th>Mains</th><th>Average</th>";
+	out0 += "<tr>";
+	out0 += "<td>" + "Games Analyzed" + "</td>";
+	out0 += "<td>" + arr.gamesRecorded.mains + "</td>";
+	out0 += "<td>" + arr.gamesRecorded.avg + "</td>";
+	out0 += "</tr>";
+	
+	out0 += "<tr>";
+	out0 += "<td>" + "Games Won" + "</td>";
+	out0 += "<td>" + arr.gamesWon.mains + "</td>";
+	out0 += "<td>" + arr.gamesWon.avg + "</td>";
+	out0 += "</tr>";
+	
+	out0 += "<tr>";
+	out0 += "<td>" + "Win Rate" + "</td>";
+	out0 += "<td>" + (arr.gamesWon.mains/arr.gamesRecorded.mains*100).toFixed(4) + "%</td>";
+	out0 += "<td>" + (arr.gamesWon.avg/arr.gamesRecorded.avg*100).toFixed(4) + "%</td>";
+	out0 += "</tr>";
+	
+	out0 += "</table>";
+	
+	//document.getElementById("stats").innerHTML = out0;
+	
+    var out = "<table><col width='95px'><col width='95px'><col width='95px'><col width='95px'><col width='95px'>";
+
+	out += "<th></th><th colspan='2'> Mains</th><th colspan='2'> Average player</th>";
+	out += "<tr><td></td><td>when winning</td><td>when losing</td><td>when winning</td><td>when losing</td></tr>";
+	
+	out += "<tr>";
+	out += "<td>" + "DPS" + "</td>";
+	out += "<td>" + arr.totalDamageDealt.win.mains.toFixed(2) + "</td>";
+	out += "<td>" + arr.totalDamageDealt.lose.mains.toFixed(2) + "</td>";
+	out += "<td>" + arr.totalDamageDealt.win.avg.toFixed(2) + "</td>";
+	out += "<td>" + arr.totalDamageDealt.lose.avg.toFixed(2) + "</td>";
+	out += "</tr>";
+	
+	out += "<td>" + "DPS Champs" + "</td>";
+	out += "<td>" + arr.totalDamageToChampions.win.mains.toFixed(2) + "</td>";
+	out += "<td>" + arr.totalDamageToChampions.lose.mains.toFixed(2) + "</td>";
+	out += "<td>" + arr.totalDamageToChampions.win.avg.toFixed(2) + "</td>";
+	out += "<td>" + arr.totalDamageToChampions.lose.avg.toFixed(2) + "</td>";
+	out += "</tr>";
+	
+	out += "<td>" + "CCPS" + "</td>";
+	out += "<td>" + arr.totalTimeCrowdControlDealt.win.mains.toFixed(2) + "</td>";
+	out += "<td>" + arr.totalTimeCrowdControlDealt.lose.mains.toFixed(2) + "</td>";
+	out += "<td>" + arr.totalTimeCrowdControlDealt.win.avg.toFixed(2) + "</td>";
+	out += "<td>" + arr.totalTimeCrowdControlDealt.lose.avg.toFixed(2) + "</td>";
+	out += "</tr>";
+	
+	out += "<tr>";
+	out += "<td>" + "KDA" + "</td>";
+	out += "<td>" + arr.KDA.win.mains.toFixed(2) + "</td>";
+	out += "<td>" + arr.KDA.lose.mains.toFixed(2) + "</td>";
+	out += "<td>" + arr.KDA.win.avg.toFixed(2) + "</td>";
+	out += "<td>" + arr.KDA.lose.avg.toFixed(2) + "</td>";
+	out += "</tr>";
 	
 	out += "</table>";
-    document.getElementById("stats").innerHTML = out;
+	
+	//var out2 = "<table>";
+	
+	//out2 += "</table>";
+	
+    document.getElementById(statsFrame).innerHTML = out0+"<br><br>"+out;
 }
 </script>
 
