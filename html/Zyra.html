@@ -34,6 +34,7 @@ body{
 #footer{
 	clear: both;
 }
+
 div.background{
 	background-image: url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/Zyra_1.jpg) ;
 	background-repeat: no-repeat;
@@ -65,10 +66,38 @@ div.pseudobox2{
 }
 </style>-->
 
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script>
+$(document).ready(function(){
+
+    $("#hs_gamesPlayed").click(function(){
+        $("#gamesPlayed_chart").toggle('show');
+    });
+
+    $("#hs_dps").click(function(){
+        $("#dps_chart").toggle('show');
+    });
+
+    $("#hs_dpschamp").click(function(){
+        $("#dpschamp_chart").toggle('show');
+    });
+
+    $("#hs_ccps").click(function(){
+        $("#ccps_chart").toggle('show');
+    });
+
+    $("#hs_kda").click(function(){
+        $("#kda_chart").toggle('show');
+    });
+});
+</script>
+
 </head>
 
 <body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <div class='background'>
 <div class='transbox'>
 <div class='pseudobox'>
@@ -79,12 +108,26 @@ div.pseudobox2{
 <img src='http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Zyra_0.jpg' style='border:none'></img>
 <p id='midFrame'> </p>
 </div>
+
 <div class='pseudobox2'>
-<div id="gamesPlayed_chart"></div>
-<div id="dps_chart"></div>
-<div id="dpschamp_chart"></div>
-<div id="ccps_chart"></div>
-<div id="kda_chart"></div>
+
+<div> 
+         Click on a button to show/hide a chart.
+<br>
+</div>
+
+<button id="hs_gamesPlayed">Win Rate Chart</button>
+<button id="hs_dps">DPS Chart</button>
+<button id="hs_dpschamp">DPS to Champions Chart</button>
+<button id="hs_ccps">Crowd Control Chart</button>
+<button id="hs_kda">KDA Chart</button>
+
+<div id="gamesPlayed_chart" style="display:block"></div>
+<div id="kda_chart" style="display:block"></div>
+<div id="dps_chart" style="display:block"></div>
+<div id="dpschamp_chart" style="display:block"></div>
+<div id="ccps_chart" style="display:block"></div>
+
 <br>
 </div>
 
@@ -128,37 +171,39 @@ function plot(response1,response2){
 	google.setOnLoadCallback(drawStacked);
 	
 	function drawStacked() {
-      var data = google.visualization.arrayToDataTable([
+      
+	  /*var data = google.visualization.arrayToDataTable([
         ['Games Played', 'Wins', 'Loses',{role:'annotation'}],
         ['5.11 Avg', arr.gamesWon.avg, arr.gamesRecorded.avg-arr.gamesWon.avg, oldavg.toString()],
 		['5.11 Mains', arr.gamesWon.mains, arr.gamesRecorded.mains-arr.gamesWon.mains, oldmains.toString()],
 		['5.14 Avg', arr2.gamesWon.avg, arr2.gamesRecorded.avg-arr2.gamesWon.avg, newavg.toString()],
 		['5.14 Mains', arr2.gamesWon.mains, arr2.gamesRecorded.mains-arr2.gamesWon.mains, newmains.toString()],
 		
+      ]);*/
+	  
+	  var data = google.visualization.arrayToDataTable([
+        ['Win Rate', '5.11','5.14'],
+        ['Avg', oldavg, newavg],
+		['Mains', oldmains, newmains],
+	
       ]);
 	  
 	  var view = new google.visualization.DataView(data);
-      view.setColumns([0, 1,2,
-                       { calc: "stringify",
-                         sourceColumn: 1,
-                         type: "string",
-                         role: "annotation" },
-                       ]);
-	  
+  
 
       var options = {
-        title: 'Total Games Played',
+        title: 'Win Rate',
         chartArea: {width: '62%'},
-        isStacked: true,
+        isStacked: false,
         hAxis: {
-          title: 'Number of Games',
+          title: 'Win Rate (%)',
           minValue: 0,
         },
         //vAxis: {
         //  title: ''
         //},
-		bar: { groupWidth: "10"},
-		height: 165
+		bar: { groupWidth: "20"},
+		height: 150
       };
       var chart = new google.visualization.BarChart(document.getElementById('gamesPlayed_chart'));
       chart.draw(data, options);
