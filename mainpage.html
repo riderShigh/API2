@@ -4,21 +4,28 @@
 		<style>
 			body{
 				background-color: #000000;
-				scrollbar-base-color: #000000;
+				scrollbar-base-color: #444444;
+				scrollbar-track-color: #000000;
 			} 
+
+			a:hover{
+				background-color: #ff0000;
+				border: 5px;
+			}
+			
 		</style>
 	</head>
 	
 	<body>
 		<div class='midframe'>
-			<iframe src='http://rawgit.com/riderShigh/API2/master/html/Annie.html' align='middle' style="border:none" width=100% height=717px>
+			<iframe src='http://rawgit.com/riderShigh/API2/master/html/Azir.html' align='middle' style="border:none" width=100% height="717" name='dataFrame'>
 				
 			</iframe>
 		</div>
+		<br>
 	</body>
-	
+	 
 	<nav>
-
 		<div id='id01'>
 			<img src='http://ddragon.leagueoflegends.com/cdn/5.16.1/img/champion/Akali.png'>
 			</img>
@@ -41,9 +48,12 @@
 				var mageList = JSON.parse(response);
 				var lineSkip = 0;
 				var champList = [];
+				var champList2 = [];
+				
 				
 				for(var key in mageList){
-					var champName = mageList[key]
+					var champName = mageList[key];
+					var champName2 = mageList[key];
 					champName = champName.replace(/\s+/g,'');
 					champName = champName.replace(/\'/g,'');
 					champName = champName.toLowerCase();
@@ -52,16 +62,18 @@
 					if(champName=='Kogmaw'){champName = 'KogMaw'};
 					if(champName=='Fiddlesticks'){champName = 'FiddleSticks'};
 					champList.push(champName);
+					champList2.push(champName2);
 				}
 				
 				champList = champList.sort();
 				
 				for(var c=0; c<champList.length; c++){
 					var iconUrl = '"http://ddragon.leagueoflegends.com/cdn/5.16.1/img/champion/' + champList[c] +'.png"';
-					out += "<img src=" + iconUrl + " width='60px'></img>  ";
+					var iconLink = 'http://rawgit.com/riderShigh/API2/master/html/' + champList[c] + '.html';
+					out += "<span class='Icon" + c + "'><a href='" + iconLink + "' target='dataFrame'><img src=" + iconUrl + " width='60px'></img></a></span>  ";
 					//out += "<img src='http://ddragon.leagueoflegends.com/cdn/5.16.1/img/champion/FiddleSticks.png'></img>";
 					//out += iconUrl +'<br>';
-					//out += champName + '<br>';
+					//out += champName + '<br>'
 					
 				}
 				document.getElementById('id01').innerHTML = out;
