@@ -136,6 +136,15 @@ function plot(response1,response2){
 		['5.14 Mains', arr2.gamesWon.mains, arr2.gamesRecorded.mains-arr2.gamesWon.mains, newmains.toString()],
 		
       ]);
+	  
+	  var view = new google.visualization.DataView(data);
+      view.setColumns([0, 1,2,
+                       { calc: "stringify",
+                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" },
+                       ]);
+	  
 
       var options = {
         title: 'Total Games Played',
