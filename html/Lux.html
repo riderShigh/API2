@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+img{
+	opacity: 1.0;
+}
+body{
+	background-color: #000000;
+	margin: 0;
+	padding: 0;
+	scrollbar-base-color: #333333;
+	scrollbar-track-color: #111111;
+	scrollbar-arrow-color: #000000;
+	scrollbar-3dlight-color: #000000;
+}
+#header{
+	text-align:center;
+	padding:5px;
+	font-family: "PT Sans Narrow", serif;
+}
+#loadingPic{
+	float: left;
+}
+#stats{
+	float: left;
+	padding: 45px;
+}
+#stats2{
+	float: left;
+	padding: 45px;
+}
+#footer{
+	clear: both;
+}
+div.background{
+	background-image: url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/Lux_1.jpg) ;
+	background-repeat: no-repeat;
+	background-size: cover;
+	box-shadow: inset 0px 0px 15px 15px rgba(0,0,0,1);
+	margin-top: 0px;
+	background-attachment: fixed;
+}
+div.transbox{
+	background-color: #ffffff;
+	opacity: 0.8;
+	margin-left: 97px;
+	width: 1020px;
+	height: 80%;
+	box-shadow: 0px 0px 15px 15px rgba(0,0,0,1);
+}
+div.pseudobox{
+	margin-left: 97px;
+}
+div.pseudobox2{
+	margin-left: 325px;
+	<!--background-color: #000000;-->
+}
+</style>
+
+<!--div.textwrap{
+	background-color: #ffffff;
+	opacity: 0.5;
+}
+</style>-->
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+</head>
+
+<body>
+<div class='background'>
+<div class='transbox'>
+<div class='pseudobox'>
+<div id='header'>
+<h1>Lux</h1>
+</div>
+<div id='loadingPic'>
+<img src='http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Lux_0.jpg' style='border:none'></img>
+<p id='midFrame'> </p>
+</div>
+<div class='pseudobox2'>
+<div id="gamesPlayed_chart"></div>
+<div id="dps_chart"></div>
+<div id="dpschamp_chart"></div>
+<div id="ccps_chart"></div>
+<div id="kda_chart"></div>
+<br>
+</div>
+
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type='text/javascript'>
+google.load('visualization', '1', {packages: ['corechart', 'bar']});
+var xmlhttp = new XMLHttpRequest();
+var xmlhttp2 = new XMLHttpRequest(); 
+var url = "https://raw.githubusercontent.com/riderShigh/API2/master/statsCompare/5.11/99/champStats.json";
+var url2 = "https://raw.githubusercontent.com/riderShigh/API2/master/statsCompare/5.14/99/champStats.json";
+
+xmlhttp.onreadystatechange=function() {
+	if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	
+		xmlhttp2.onreadystatechange=function() {
+			if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
+				//myFunction(xmlhttp2.responseText,"stats2");
+				//myFunction(xmlhttp.responseText,"stats");
+				plot(xmlhttp.responseText,xmlhttp2.responseText);
+		//myFunction(xmlhttp2.responseText);
+			}
+		}
+		xmlhttp2.open("GET", url2, false);
+		xmlhttp2.send();
+		//myFunction(xmlhttp.responseText);
+	}
+}
+xmlhttp.open("GET", url, false);
+xmlhttp.send();
+
+function plot(response1,response2){
+
+	var arr = JSON.parse(response1);
+	var arr2 = JSON.parse(response2);
+	var oldavg = arr.gamesWon.avg/arr.gamesRecorded.avg*100;
+	var oldmains = arr.gamesWon.mains/arr.gamesRecorded.mains*100;
+	var newavg = arr2.gamesWon.avg/arr2.gamesRecorded.avg*100;
+	var newmains = arr2.gamesWon.mains/arr2.gamesRecorded.mains*100;
+	
+	google.setOnLoadCallback(drawStacked);
+	
+	function drawStacked() {
+      var data = google.visualization.arrayToDataTable([
+        ['Games Played', 'Wins', 'Loses',{role:'annotation'}],
+        ['5.11 Avg', arr.gamesWon.avg, arr.gamesRecorded.avg-arr.gamesWon.avg, oldavg.toString()],
+		['5.11 Mains', arr.gamesWon.mains, arr.gamesRecorded.mains-arr.gamesWon.mains, oldmains.toString()],
+		['5.14 Avg', arr2.gamesWon.avg, arr2.gamesRecorded.avg-arr2.gamesWon.avg, newavg.toString()],
+		['5.14 Mains', arr2.gamesWon.mains, arr2.gamesRecorded.mains-arr2.gamesWon.mains, newmains.toString()],
+		
+      ]);
+	  
+	  var view = new google.visualization.DataView(data);
+      view.setColumns([0, 1,2,
+                       { calc: "stringify",
+                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" },
+                       ]);
+	  
+
+      var options = {
+        title: 'Total Games Played',
+        chartArea: {width: '62%'},
+        isStacked: true,
+        hAxis: {
+          title: 'Number of Games',
+          minValue: 0,
+        },
+        //vAxis: {
+        //  title: ''
+        //},
+		bar: { groupWidth: "10"},
+		height: 165
+      };
+      var chart = new google.visualization.BarChart(document.getElementById('gamesPlayed_chart'));
+      chart.draw(data, options);
+    }
+	
+	google.setOnLoadCallback(drawDPS);
+	
+	function drawDPS() {
+      var data = google.visualization.arrayToDataTable([
+        ['DPS', 'when winning', 'when losing'],
+        ['5.11 Avg', arr.totalDamageDealt.win.avg, arr.totalDamageDealt.lose.avg],
+		['5.11 Mains', arr.totalDamageDealt.win.mains, arr.totalDamageDealt.lose.mains],
+		['5.14 Avg', arr2.totalDamageDealt.win.avg, arr2.totalDamageDealt.lose.avg],
+		['5.14 Mains', arr2.totalDamageDealt.win.mains, arr2.totalDamageDealt.lose.mains],
+		
+      ]);
+
+      var options = {
+        title: 'Damage per Second (DPS)',
+        chartArea: {width: '62%'},
+        isStacked: false,
+        hAxis: {
+          title: 'DPS',
+          minValue: 0,
+        },
+        //vAxis: {
+        //  title: ''
+        //},
+		bar: { groupWidth: "20"},
+		height: 250
+      };
+      var chart = new google.visualization.BarChart(document.getElementById('dps_chart'));
+      chart.draw(data, options);
+    }	
+
+	
+	google.setOnLoadCallback(drawDPSChamps);
+	
+	function drawDPSChamps() {
+      var data = google.visualization.arrayToDataTable([
+        ['DPS', 'when winning', 'when losing'],
+        ['5.11 Avg', arr.totalDamageToChampions.win.avg, arr.totalDamageToChampions.lose.avg],
+		['5.11 Mains', arr.totalDamageToChampions.win.mains, arr.totalDamageToChampions.lose.mains],
+		['5.14 Avg', arr2.totalDamageToChampions.win.avg, arr2.totalDamageToChampions.lose.avg],
+		['5.14 Mains', arr2.totalDamageToChampions.win.mains, arr2.totalDamageToChampions.lose.mains],
+		
+      ]);
+
+      var options = {
+        title: 'Damage per Second to Champions',
+        chartArea: {width: '62%'},
+        isStacked: false,
+        hAxis: {
+          title: 'DPS to Champions',
+          minValue: 0,
+        },
+        //vAxis: {
+        //  title: ''
+        //},
+		bar: { groupWidth: "20"},
+		height: 250
+      };
+      var chart = new google.visualization.BarChart(document.getElementById('dpschamp_chart'));
+      chart.draw(data, options);
+    }		
+
+	google.setOnLoadCallback(drawCCPS);
+	
+	function drawCCPS() {
+      var data = google.visualization.arrayToDataTable([
+        ['CCPS', 'when winning', 'when losing'],
+        ['5.11 Avg', arr.totalTimeCrowdControlDealt.win.avg*100, arr.totalTimeCrowdControlDealt.lose.avg*100],
+		['5.11 Mains', arr.totalTimeCrowdControlDealt.win.mains*100, arr.totalTimeCrowdControlDealt.lose.mains*100],
+		['5.14 Avg', arr2.totalTimeCrowdControlDealt.win.avg*100, arr2.totalTimeCrowdControlDealt.lose.avg*100],
+		['5.14 Mains', arr2.totalTimeCrowdControlDealt.win.mains*100, arr2.totalTimeCrowdControlDealt.lose.mains*100],
+		
+      ]);
+
+      var options = {
+        title: 'Percentage Game Time Dealing Crowd Control (CCPS)',
+        chartArea: {width: '62%'},
+        isStacked: false,
+        hAxis: {
+          title: 'CCPS (%)',
+          minValue: 0,
+        },
+        //vAxis: {
+        //  title: ''
+        //},
+		bar: { groupWidth: "20"},
+		height: 250
+      };
+      var chart = new google.visualization.BarChart(document.getElementById('ccps_chart'));
+      chart.draw(data, options);
+    }	
+	
+	google.setOnLoadCallback(drawKDA);
+	
+	function drawKDA() {
+      var data = google.visualization.arrayToDataTable([
+        ['CCPS', 'when winning', 'when losing'],
+        ['5.11 Avg', arr.KDA.win.avg*100, arr.KDA.lose.avg*100],
+		['5.11 Mains', arr.KDA.win.mains*100, arr.KDA.lose.mains*100],
+		['5.14 Avg', arr2.KDA.win.avg*100, arr2.KDA.lose.avg*100],
+		['5.14 Mains', arr2.KDA.win.mains*100, arr2.KDA.lose.mains*100],
+		
+      ]);
+
+      var options = {
+        title: 'KDA',
+        chartArea: {width: '62%'},
+        isStacked: false,
+        hAxis: {
+          title: 'KDA',
+          minValue: 0,
+        },
+        //vAxis: {
+        //  title: ''
+        //},
+		bar: { groupWidth: "20"},
+		height: 250
+      };
+      var chart = new google.visualization.BarChart(document.getElementById('kda_chart'));
+      chart.draw(data, options);
+    }	
+	
+}
+
+
+</script>
+
+
+<footer>
+<div id='footer'>
+[The title of your Project] isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends (c) Riot Games, Inc.
+</div>
+</footer>
+</div>
+</div>
+</div>
+
+</body>
+
+</html>
