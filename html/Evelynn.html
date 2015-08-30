@@ -67,6 +67,17 @@ div.pseudobox2{
 	background-color: rgba(255,255,255,0);
 	<!--background-color: #000000;-->
 }
+div.itemUsers{
+	text-align: left;
+}
+div.itemUserNames{
+	width:400px;
+}
+span.itemUsage{
+	margin-left: 100px;
+	background-color: rgba(255,255,255,1);
+	text-align: left;
+}
 </style>
 
 <!--div.textwrap{
@@ -101,12 +112,17 @@ $(document).ready(function(){
         $("#kda_chart").toggle('show');
     });
 	
+    $("#hs_items").click(function(){
+        $("#itemTable").toggle('show');
+    });
+	
 	$("#hs_showall").click(function(){
 		$("#gamesPlayed_chart").show('show');
 		$("#dps_chart").show('show');
 		$("#dpschamp_chart").show('show');
 		$("#ccps_chart").show('show');
 		$("#kda_chart").show('show');
+		$("#itemTable").show('show');
     });
 	
 	$("#hs_hideall").click(function(){
@@ -115,6 +131,7 @@ $(document).ready(function(){
 		$("#dpschamp_chart").hide('show');
 		$("#ccps_chart").hide('show');
 		$("#kda_chart").hide('show');
+		$("#itemTable").hide('show');
     });
 });
 </script>
@@ -127,11 +144,32 @@ $(document).ready(function(){
 <div class='transbox'>
 <div class='pseudobox'>
 <div id='header'>
+<p id='tth'></p>
 </div>
 <div id='loadingPic'>
 <h1>Evelynn</h1>
 <img src='http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Evelynn_0.jpg' style='border:none' opacity='1.0'></img>
 <p id='midFrame'> </p>
+
+<!--<script type='text/javascript'>
+var itemUrl = "https://raw.githubusercontent.com/riderShigh/API2/master/bigItemNameIds.json";
+var xmlhttpI = new XMLHttpRequest();
+
+xmlhttpI.onreadystatechange=function() {
+	if (xmlhttpI.readyState == 4 && xmlhttpI.status == 200) {
+		loadItems(xmlhttpI.responseText);
+	}
+}
+xmlhttpI.open("GET", itemUrl, true);
+xmlhttpI.send();
+
+function loadItems(response){
+	var arrItems = JSON.parse(response);
+	document.getElementById('tth').innerHTML = arrItems['eune'][];
+}
+
+</script>-->
+
 </div>
 
 <div class='pseudobox2'>
@@ -147,6 +185,7 @@ $(document).ready(function(){
 <button id="hs_dpschamp">DPS to Champions</button>
 <button id="hs_ccps">Crowd Control Duration</button>
 <div>
+<button id="hs_items">Item Popularity</button>
 <button id="hs_showall">Show All</button>
 <button id="hs_hideall">Hide All</button>
 </div>
@@ -157,16 +196,28 @@ $(document).ready(function(){
 <div id="dpschamp_chart" style="display:none"></div>
 <div id="ccps_chart" style="display:none"></div>
 <p> </p>
-</div>
 
+<div class='itemTable' id='itemTable' style='display:none'>
+<table>
+<col width=170>
+<th colspan='2'>Item Purchase Popularity</th>
+<tr><td> </td><td> </td></tr>
+<tr><td>Patch 5.11 Mains</td><td><div id="itemUsage_Mains511"></div></td></tr>
+<tr><td>Patch 5.11 Avg</td><td><div id="itemUsage_Avg511"></div></td></tr>
+<tr><td>Patch 5.14 Mains</td><td><div id="itemUsage_Mains514"></div></td></tr>
+<tr><td>Patch 5.14 Avg</td><td><div id="itemUsage_Avg514"></div></td></tr>
+</table>
+</div>
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type='text/javascript'>
 google.load('visualization', '1', {packages: ['corechart', 'bar']});
 var xmlhttp = new XMLHttpRequest();
 var xmlhttp2 = new XMLHttpRequest(); 
+var xmlhttp3 = new XMLHttpRequest();
 var url = "https://raw.githubusercontent.com/riderShigh/API2/master/statsCompare/5.11/28/champStats.json";
 var url2 = "https://raw.githubusercontent.com/riderShigh/API2/master/statsCompare/5.14/28/champStats.json";
+var url3 = "https://raw.githubusercontent.com/riderShigh/API2/master/bigItemNameIds.json";
 
 xmlhttp.onreadystatechange=function() {
 	if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -176,7 +227,17 @@ xmlhttp.onreadystatechange=function() {
 				//myFunction(xmlhttp2.responseText,"stats2");
 				//myFunction(xmlhttp.responseText,"stats");
 				plot(xmlhttp.responseText,xmlhttp2.responseText);
-		//myFunction(xmlhttp2.responseText);
+
+				xmlhttp3.onreadystatechange=function() {
+					if (xmlhttp3.readyState == 4 && xmlhttp3.status == 200) {
+					
+						showItems(xmlhttp.responseText,xmlhttp2.responseText,xmlhttp3.responseText);
+					}
+				}
+
+				xmlhttp3.open("GET", url3, false);
+				xmlhttp3.send();
+				
 			}
 		}
 		xmlhttp2.open("GET", url2, false);
@@ -366,7 +427,66 @@ function plot(response1,response2){
       };
       var chart = new google.visualization.BarChart(document.getElementById('kda_chart'));
       chart.draw(data, options);
-    }	
+    }
+}
+
+function showItems(response1,response2,response3){
+	
+	var arr = [];
+	arr.push(JSON.parse(response1));
+	arr.push(JSON.parse(response2));
+	var itemList = JSON.parse(response3);
+	
+	/*var items511mains = arr['itemUsage']['mains'];
+	var items511avg = arr['itemUsage']['avg'];
+	var items514mains = arr2['itemUsage']['mains'];
+	var items514avg = arr2['itemUsage']['avg'];*/
+	
+	var patch = ['5.14','5.14'];
+	var patch1 = ['511','514'];
+	var type = ['mains','avg'];
+	var type1 = ['Mains','Avg'];
+	//var stringThis = 'itemUsage_'+ type1[0] + patch1[0].toString();
+	//document.getElementById('itemUsage_'+ type1[0] + patch1[0].toString()).innerHTML = stringThis;
+	
+	for(var a1=0; a1<2; a1++){
+		for(var a2=0; a2<2; a2++){
+			var newList = {};
+			for(var keyA in arr[a2]['itemUsage'][type[a1]]){
+				if(arr[a2]['itemUsage'][type[a1]].hasOwnProperty(keyA)){
+					for(var keyB in itemList['na'][patch[a2]]){
+						if(itemList['na'][patch[a2]].hasOwnProperty(keyB.toString())){
+							//document.getElementById('tth').innerHTML = key;
+							if(keyA==itemList['na'][patch[a2]][keyB]){
+								newList[keyB.toString()] = arr[a2]['itemUsage'][type[a1]][keyA];
+							}
+						}
+					}
+				}
+			}
+			
+			var sortable = [];
+			for(var keyC in newList){sortable.push([keyC, newList[keyC]]);}
+			sortable.sort(function(a, b) {return b[1] - a[1]});
+			
+			var outA = '<table><tr>';
+			for(var k=0; k<6; k++){
+				var itemUrl = 'http://ddragon.leagueoflegends.com/cdn/' + patch[a2].toString() + '.1/img/item/' + sortable[k][0].toString() + '.png';
+				outA += "<td><img src=" + itemUrl + " width='50px'></img></td>";
+
+			}
+			outA += '</tr><tr>';
+			for(var k=0; k<6; k++){
+				var itemUrl = 'http://ddragon.leagueoflegends.com/cdn/' + patch[a2].toString() + '.1/img/item/' + sortable[k][0].toString() + '.png';
+				var thisUsage = sortable[k][1]*100;
+				thisUsage = thisUsage.toFixed(2);
+				outA += '<td>' + thisUsage.toString() + "% </td>";
+			}			
+			outA += '</table>';
+			
+			document.getElementById('itemUsage_'+ type1[a1] + patch1[a2].toString()).innerHTML = outA;
+		}
+	}
 	
 }
 
