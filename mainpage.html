@@ -13,8 +13,23 @@
 				border: 5px;
 			}
 			
+			div.logoBar{
+				color: #ffd700;
+				font-size: 1.5em;
+				text-shadow: 0px 0px 3px #000000, 0px 0px 5px #cdf500;
+			}
+			h3{
+				text-align: center
+			}
+			
 		</style>
 	</head>
+	
+	<header>
+		<div class='logoBar'>
+			<h3>AP Champs: Mains vs Non-Mains</h3>
+		</div>
+	</header>
 	
 	<body>
 		<div class='midframe'>
@@ -68,7 +83,7 @@
 				for(var c=0; c<champList.length; c++){
 					var iconUrl = '"http://ddragon.leagueoflegends.com/cdn/5.16.1/img/champion/' + champList[c] +'.png"';
 					var iconLink = 'http://rawgit.com/riderShigh/API2/master/html/' + champList[c] + '.html';
-					out += "<span class='Icon" + c + "'><a href='" + iconLink + "' target='dataFrame'><img src=" + iconUrl + " width='60px'></img></a></span>  ";
+					out += "<span class='Icon" + c + "'><a href='" + iconLink + "' target='dataFrame'><img src=" + iconUrl + " width='50px'></img></a></span>  ";
 					//out += "<img src='http://ddragon.leagueoflegends.com/cdn/5.16.1/img/champion/FiddleSticks.png'></img>";
 					//out += iconUrl +'<br>';
 					//out += champName + '<br>'

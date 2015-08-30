@@ -15,6 +15,9 @@ body{
 	scrollbar-arrow-color: #000000;
 	scrollbar-3dlight-color: #000000;
 }
+h1{
+	text-indent: 20px
+}
 #header{
 	text-align:center;
 	padding:5px;
@@ -22,14 +25,18 @@ body{
 }
 #loadingPic{
 	float: left;
+	width: 300px;
+	text-align: center;
 }
 #stats{
 	float: left;
 	padding: 45px;
+	text-align: center;
 }
 #stats2{
 	float: left;
 	padding: 45px;
+	text-align: center;
 }
 #footer{
 	clear: both;
@@ -56,6 +63,7 @@ div.pseudobox{
 }
 div.pseudobox2{
 	margin-left: 325px;
+	text-align: center;
 	<!--background-color: #000000;-->
 }
 </style>
@@ -91,6 +99,14 @@ $(document).ready(function(){
     $("#hs_kda").click(function(){
         $("#kda_chart").toggle('show');
     });
+	
+	$("#hs_all").click(function(){
+		$("#gamesPlayed_chart").toggle('show');
+		$("#dps_chart").toggle('show');
+		$("#dpschamp_chart").toggle('show');
+		$("#ccps_chart").toggle('show');
+		$("#kda_chart").toggle('show');
+    });
 });
 </script>
 
@@ -102,9 +118,9 @@ $(document).ready(function(){
 <div class='transbox'>
 <div class='pseudobox'>
 <div id='header'>
-<h1>Ryze</h1>
 </div>
 <div id='loadingPic'>
+<h1>Ryze</h1>
 <img src='http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Ryze_0.jpg' style='border:none' opacity='1.0'></img>
 <p id='midFrame'> </p>
 </div>
@@ -112,23 +128,25 @@ $(document).ready(function(){
 <div class='pseudobox2'>
 
 <div> 
-         Click on a button to show/hide a chart.
+    <p>Click on a button to show/hide a chart.</p>
 <br>
 </div>
 
-<button id="hs_gamesPlayed">Win Rate Chart</button>
-<button id="hs_dps">DPS Chart</button>
-<button id="hs_dpschamp">DPS to Champions Chart</button>
-<button id="hs_ccps">Crowd Control Chart</button>
-<button id="hs_kda">KDA Chart</button>
+<button id="hs_gamesPlayed">Win Rate</button>
+<button id="hs_kda">KDA</button>
+<button id="hs_dps">DPS</button>
+<button id="hs_dpschamp">DPS to Champions</button>
+<button id="hs_ccps">Crowd Control Duration</button>
+<div>
+<button id="hs_all">Hide/Show All</button>
+</div>
 
 <div id="gamesPlayed_chart" style="display:block"></div>
 <div id="kda_chart" style="display:block"></div>
 <div id="dps_chart" style="display:block"></div>
 <div id="dpschamp_chart" style="display:block"></div>
 <div id="ccps_chart" style="display:block"></div>
-
-<br>
+<p> </p>
 </div>
 
 
@@ -344,6 +362,12 @@ function plot(response1,response2){
 </div>
 </div>
 </div>
+
+<script>
+$(function(){
+$(#hs_all).trigger('click');
+});
+</script>
 
 </body>
 
