@@ -86,6 +86,8 @@ for reg in xrange(0,len(region)):
 				for itemSlot in xrange(0,7):
 					itemStr = 'item' + str(itemSlot);
 					if thisMatchStats[itemStr]==3716 or thisMatchStats[itemStr]==3720 or thisMatchStats[itemStr]==3724: thisMatchStats[itemStr] = 3708;
+					if thisMatchStats[itemStr]==3718 or thisMatchStats[itemStr]==3722 or thisMatchStats[itemStr]==3726: thisMatchStats[itemStr] = 3710;
+					if thisMatchStats[itemStr]==3931 or thisMatchStats[itemStr]==3932 or thisMatchStats[itemStr]==3733: thisMatchStats[itemStr] = 3930;
 					if str(thisMatchStats[itemStr]) in itemTally['avg']:
 						itemTally['avg'][str(thisMatchStats[itemStr])] += 1;
 					else:
@@ -112,6 +114,8 @@ for reg in xrange(0,len(region)):
 							kdaLoseCount['mains'] += 1;
 						for itemSlot in xrange(0,7):
 							itemStr = 'item' + str(itemSlot);
+							if thisMatchStats[itemStr]==3716 or thisMatchStats[itemStr]==3720 or thisMatchStats[itemStr]==3724: thisMatchStats[itemStr] = 3708;
+							if thisMatchStats[itemStr]==3718 or thisMatchStats[itemStr]==3722 or thisMatchStats[itemStr]==3726: thisMatchStats[itemStr] = 3710;
 							if str(thisMatchStats[itemStr]) in itemTally['mains']:
 								itemTally['mains'][str(thisMatchStats[itemStr])] += 1;
 							else:
