@@ -51,8 +51,7 @@ div.background{
 	background-attachment: fixed;
 }
 div.transbox{
-	background-color: #ffffff;
-	opacity: 0.8;
+	background-color: rgba(255,255,255,0.8);
 	margin-left: 97px;
 	width: 1020px;
 	height: 80%;
@@ -60,10 +59,12 @@ div.transbox{
 }
 div.pseudobox{
 	margin-left: 97px;
+	background-color: rgba(255,255,255,0);
 }
 div.pseudobox2{
 	margin-left: 325px;
 	text-align: center;
+	background-color: rgba(255,255,255,0);
 	<!--background-color: #000000;-->
 }
 </style>
@@ -100,12 +101,20 @@ $(document).ready(function(){
         $("#kda_chart").toggle('show');
     });
 	
-	$("#hs_all").click(function(){
-		$("#gamesPlayed_chart").toggle('show');
-		$("#dps_chart").toggle('show');
-		$("#dpschamp_chart").toggle('show');
-		$("#ccps_chart").toggle('show');
-		$("#kda_chart").toggle('show');
+	$("#hs_showall").click(function(){
+		$("#gamesPlayed_chart").show('show');
+		$("#dps_chart").show('show');
+		$("#dpschamp_chart").show('show');
+		$("#ccps_chart").show('show');
+		$("#kda_chart").show('show');
+    });
+	
+	$("#hs_hideall").click(function(){
+		$("#gamesPlayed_chart").hide('show');
+		$("#dps_chart").hide('show');
+		$("#dpschamp_chart").hide('show');
+		$("#ccps_chart").hide('show');
+		$("#kda_chart").hide('show');
     });
 });
 </script>
@@ -128,7 +137,7 @@ $(document).ready(function(){
 <div class='pseudobox2'>
 
 <div> 
-    <p>Click on a button to show/hide a chart.</p>
+    <p>Click on a button to show/hide a chart. Hover on bars to see exact numbers.</p>
 <br>
 </div>
 
@@ -138,14 +147,15 @@ $(document).ready(function(){
 <button id="hs_dpschamp">DPS to Champions</button>
 <button id="hs_ccps">Crowd Control Duration</button>
 <div>
-<button id="hs_all">Hide/Show All</button>
+<button id="hs_showall">Show All</button>
+<button id="hs_hideall">Hide All</button>
 </div>
 
 <div id="gamesPlayed_chart" style="display:block"></div>
 <div id="kda_chart" style="display:block"></div>
-<div id="dps_chart" style="display:block"></div>
-<div id="dpschamp_chart" style="display:block"></div>
-<div id="ccps_chart" style="display:block"></div>
+<div id="dps_chart" style="display:none"></div>
+<div id="dpschamp_chart" style="display:none"></div>
+<div id="ccps_chart" style="display:none"></div>
 <p> </p>
 </div>
 
@@ -213,6 +223,7 @@ function plot(response1,response2){
         title: 'Win Rate',
         chartArea: {width: '62%'},
         isStacked: false,
+		backgroundColor: { fill:'transparent' },
         hAxis: {
           title: 'Win Rate (%)',
           minValue: 0,
@@ -221,6 +232,7 @@ function plot(response1,response2){
         //  title: ''
         //},
 		bar: { groupWidth: "20"},
+		width: 530,
 		height: 150
       };
       var chart = new google.visualization.BarChart(document.getElementById('gamesPlayed_chart'));
@@ -231,7 +243,7 @@ function plot(response1,response2){
 	
 	function drawDPS() {
       var data = google.visualization.arrayToDataTable([
-        ['DPS', 'when winning', 'when losing'],
+        ['DPS', 'winning', 'losing'],
         ['5.11 Avg', arr.totalDamageDealt.win.avg, arr.totalDamageDealt.lose.avg],
 		['5.11 Mains', arr.totalDamageDealt.win.mains, arr.totalDamageDealt.lose.mains],
 		['5.14 Avg', arr2.totalDamageDealt.win.avg, arr2.totalDamageDealt.lose.avg],
@@ -243,6 +255,7 @@ function plot(response1,response2){
         title: 'Damage per Second (DPS)',
         chartArea: {width: '62%'},
         isStacked: false,
+		backgroundColor: { fill:'transparent' },
         hAxis: {
           title: 'DPS',
           minValue: 0,
@@ -251,6 +264,7 @@ function plot(response1,response2){
         //  title: ''
         //},
 		bar: { groupWidth: "20"},
+		width: 530,
 		height: 250
       };
       var chart = new google.visualization.BarChart(document.getElementById('dps_chart'));
@@ -262,7 +276,7 @@ function plot(response1,response2){
 	
 	function drawDPSChamps() {
       var data = google.visualization.arrayToDataTable([
-        ['DPS', 'when winning', 'when losing'],
+        ['DPS', 'winning', 'losing'],
         ['5.11 Avg', arr.totalDamageToChampions.win.avg, arr.totalDamageToChampions.lose.avg],
 		['5.11 Mains', arr.totalDamageToChampions.win.mains, arr.totalDamageToChampions.lose.mains],
 		['5.14 Avg', arr2.totalDamageToChampions.win.avg, arr2.totalDamageToChampions.lose.avg],
@@ -274,6 +288,7 @@ function plot(response1,response2){
         title: 'Damage per Second to Champions',
         chartArea: {width: '62%'},
         isStacked: false,
+		backgroundColor: { fill:'transparent' },
         hAxis: {
           title: 'DPS to Champions',
           minValue: 0,
@@ -282,6 +297,7 @@ function plot(response1,response2){
         //  title: ''
         //},
 		bar: { groupWidth: "20"},
+		width: 530,
 		height: 250
       };
       var chart = new google.visualization.BarChart(document.getElementById('dpschamp_chart'));
@@ -292,7 +308,7 @@ function plot(response1,response2){
 	
 	function drawCCPS() {
       var data = google.visualization.arrayToDataTable([
-        ['CCPS', 'when winning', 'when losing'],
+        ['CCPS', 'winning', 'losing'],
         ['5.11 Avg', arr.totalTimeCrowdControlDealt.win.avg*100, arr.totalTimeCrowdControlDealt.lose.avg*100],
 		['5.11 Mains', arr.totalTimeCrowdControlDealt.win.mains*100, arr.totalTimeCrowdControlDealt.lose.mains*100],
 		['5.14 Avg', arr2.totalTimeCrowdControlDealt.win.avg*100, arr2.totalTimeCrowdControlDealt.lose.avg*100],
@@ -304,6 +320,7 @@ function plot(response1,response2){
         title: 'Percentage Game Time Dealing Crowd Control (CCPS)',
         chartArea: {width: '62%'},
         isStacked: false,
+		backgroundColor: { fill:'transparent' },
         hAxis: {
           title: 'CCPS (%)',
           minValue: 0,
@@ -312,6 +329,7 @@ function plot(response1,response2){
         //  title: ''
         //},
 		bar: { groupWidth: "20"},
+		width: 530,
 		height: 250
       };
       var chart = new google.visualization.BarChart(document.getElementById('ccps_chart'));
@@ -322,7 +340,7 @@ function plot(response1,response2){
 	
 	function drawKDA() {
       var data = google.visualization.arrayToDataTable([
-        ['CCPS', 'when winning', 'when losing'],
+        ['CCPS', 'winning', 'losing'],
         ['5.11 Avg', arr.KDA.win.avg*100, arr.KDA.lose.avg*100],
 		['5.11 Mains', arr.KDA.win.mains*100, arr.KDA.lose.mains*100],
 		['5.14 Avg', arr2.KDA.win.avg*100, arr2.KDA.lose.avg*100],
@@ -334,6 +352,7 @@ function plot(response1,response2){
         title: 'KDA',
         chartArea: {width: '62%'},
         isStacked: false,
+		backgroundColor: { fill:'transparent' },
         hAxis: {
           title: 'KDA',
           minValue: 0,
@@ -342,6 +361,7 @@ function plot(response1,response2){
         //  title: ''
         //},
 		bar: { groupWidth: "20"},
+		width: 530,
 		height: 250
       };
       var chart = new google.visualization.BarChart(document.getElementById('kda_chart'));
@@ -355,9 +375,7 @@ function plot(response1,response2){
 
 
 <footer>
-<div id='footer'>
-[The title of your Project] isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends (c) Riot Games, Inc.
-</div>
+<div id='footer'></div>
 </footer>
 </div>
 </div>
