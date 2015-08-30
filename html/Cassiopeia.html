@@ -489,7 +489,7 @@ function showItems(response1,response2,response3){
 	var items514mains = arr2['itemUsage']['mains'];
 	var items514avg = arr2['itemUsage']['avg'];*/
 	
-	var patch = ['5.14','5.14'];
+	var patch = ['5.11','5.14'];
 	var patch1 = ['511','514'];
 	var type = ['mains','avg'];
 	var type1 = ['Mains','Avg'];
@@ -499,6 +499,7 @@ function showItems(response1,response2,response3){
 	for(var a1=0; a1<2; a1++){
 		for(var a2=0; a2<2; a2++){
 			var newList = {};
+			//var outsome = '';
 			for(var keyA in arr[a2]['itemUsage'][type[a1]]){
 				if(arr[a2]['itemUsage'][type[a1]].hasOwnProperty(keyA)){
 					for(var keyB in itemList['na'][patch[a2]]){
@@ -506,11 +507,14 @@ function showItems(response1,response2,response3){
 							//document.getElementById('tth').innerHTML = key;
 							if(keyA==itemList['na'][patch[a2]][keyB]){
 								newList[keyB.toString()] = arr[a2]['itemUsage'][type[a1]][keyA];
+								//outsome += keyB.toString() + '  ';
 							}
 						}
 					}
 				}
 			}
+			
+			//document.getElementById('header').innerHTML = outsome;
 			
 			var sortable = [];
 			for(var keyC in newList){sortable.push([keyC, newList[keyC]]);}
