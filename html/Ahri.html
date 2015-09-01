@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+img{
+	opacity: 1.0;
+}
+body{
+	background-color: #000000;
+	margin: 0;
+	padding: 0;
+	scrollbar-base-color: #333333;
+	scrollbar-track-color: #111111;
+	scrollbar-arrow-color: #000000;
+	scrollbar-3dlight-color: #000000;
+}
+h1{
+	text-indent: 20px
+}
+#header{
+	text-align:center;
+	padding:5px;
+	font-family: "PT Sans Narrow", serif;
+}
+#loadingPic{
+	float: left;
+	width: 300px;
+	text-align: center;
+}
+#stats{
+	float: left;
+	padding: 45px;
+	text-align: center;
+}
+#stats2{
+	float: left;
+	padding: 45px;
+	text-align: center;
+}
+#footer{
+	clear: both;
+}
+
+div.background{
+	background-image: url(http://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ahri_1.jpg) ;
+	background-repeat: no-repeat;
+	background-size: cover;
+	box-shadow: inset 0px 0px 15px 15px rgba(0,0,0,1);
+	margin-top: 0px;
+	background-attachment: fixed;
+}
+div.transbox{
+	background-color: rgba(255,255,255,0.8);
+	margin-left: 97px;
+	width: 1020px;
+	height: 80%;
+	box-shadow: 0px 0px 15px 15px rgba(0,0,0,1);
+}
+div.pseudobox{
+	margin-left: 97px;
+	background-color: rgba(255,255,255,0);
+}
+div.pseudobox2{
+	margin-left: 325px;
+	text-align: center;
+	background-color: rgba(255,255,255,0);
+	<!--background-color: #000000;-->
+}
+div.itemUsers{
+	text-align: left;
+}
+div.itemUserNames{
+	width:400px;
+}
+span.itemUsage{
+	margin-left: 100px;
+	background-color: rgba(255,255,255,1);
+	text-align: left;
+}
+div.pickDrop_chart{
+	height: 700px;
+}
+</style>
+
+<!--div.textwrap{
+	background-color: #ffffff;
+	opacity: 0.5;
+}
+</style>-->
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script>
+$(document).ready(function(){
+
+    $("#hs_gamesPlayed").click(function(){
+        $("#gamesPlayed_chart").toggle('show');
+    });
+
+    $("#hs_dps").click(function(){
+        $("#dps_chart").toggle('show');
+    });
+
+    $("#hs_dpschamp").click(function(){
+        $("#dpschamp_chart").toggle('show');
+    });
+
+    $("#hs_ccps").click(function(){
+        $("#ccps_chart").toggle('show');
+    });
+
+    $("#hs_kda").click(function(){
+        $("#kda_chart").toggle('show');
+    });
+	
+    $("#hs_items").click(function(){
+        $("#itemTable").toggle('show');
+    });
+	
+    $("#hs_pickDrop").click(function(){
+        $("#pickDrop_chart").toggle('show');
+    });
+	
+	$("#hs_showall").click(function(){
+		$("#gamesPlayed_chart").show('show');
+		$("#dps_chart").show('show');
+		$("#dpschamp_chart").show('show');
+		$("#ccps_chart").show('show');
+		$("#kda_chart").show('show');
+		$("#pickDrop_chart").show('show');
+		$("#itemTable").show('show');
+    });
+	
+	$("#hs_hideall").click(function(){
+		$("#gamesPlayed_chart").hide('show');
+		$("#dps_chart").hide('show');
+		$("#dpschamp_chart").hide('show');
+		$("#ccps_chart").hide('show');
+		$("#kda_chart").hide('show');
+		$("#pickDrop_chart").hide('show');
+		$("#itemTable").hide('show');
+    });
+});
+</script>
+
+</head>
+
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<div class='background'>
+<div class='transbox'>
+<div class='pseudobox'>
+<div id='header'>
+<p id='tth'></p>
+</div>
+<div id='loadingPic'>
+<h1>Ahri</h1>
+<img src='http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Ahri_0.jpg' style='border:none' opacity='1.0'></img>
+<p id='midFrame'> </p>
+
+<!--<script type='text/javascript'>
+var itemUrl = "https://raw.githubusercontent.com/riderShigh/API2/master/bigItemNameIds.json";
+var xmlhttpI = new XMLHttpRequest();
+
+xmlhttpI.onreadystatechange=function() {
+	if (xmlhttpI.readyState == 4 && xmlhttpI.status == 200) {
+		loadItems(xmlhttpI.responseText);
+	}
+}
+xmlhttpI.open("GET", itemUrl, true);
+xmlhttpI.send();
+
+function loadItems(response){
+	var arrItems = JSON.parse(response);
+	document.getElementById('tth').innerHTML = arrItems['eune'][];
+}
+
+</script>-->
+
+</div>
+
+<div class='pseudobox2'>
+
+<div> 
+    <p>Click on a button to show/hide a chart. Hover on bars to cover across patches.</p>
+<br>
+</div>
+
+<button id="hs_pickDrop">Pick/Drop</button>
+<button id="hs_gamesPlayed">Win Rate</button>
+<button id="hs_kda">KDA</button>
+<button id="hs_dps">DPS</button>
+<button id="hs_dpschamp">DPS to Champions</button>
+<div>
+<button id="hs_ccps">Crowd Control Duration</button>
+<button id="hs_items">Item Popularity</button>
+<button id="hs_showall">Show All</button>
+<button id="hs_hideall">Hide All</button>
+</div>
+<p></p>
+<div id="pickDrop_chart" style="display:block; height:250px"></div>
+<div id="gamesPlayed_chart" style="display:block"></div>
+<div id="kda_chart" style="display:none"></div>
+<div id="dps_chart" style="display:none"></div>
+<div id="dpschamp_chart" style="display:none"></div>
+<div id="ccps_chart" style="display:none"></div>
+<p> </p>
+
+<div class='itemTable' id='itemTable' style='display:none'>
+<table>
+<col width=170>
+<th colspan='2'>Item Purchase Popularity</th>
+<tr><td> </td><td> </td></tr>
+<tr><td>Patch 5.11 Mains</td><td><div id="itemUsage_Mains511"></div></td></tr>
+<tr><td>Patch 5.11 Avg</td><td><div id="itemUsage_Avg511"></div></td></tr>
+<tr><td>Patch 5.14 Mains</td><td><div id="itemUsage_Mains514"></div></td></tr>
+<tr><td>Patch 5.14 Avg</td><td><div id="itemUsage_Avg514"></div></td></tr>
+</table>
+</div>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type='text/javascript'>
+google.load('visualization', '1', {packages: ['corechart', 'bar']});
+var xmlhttp = new XMLHttpRequest();
+var xmlhttp2 = new XMLHttpRequest();
+var xmlhttp4 = new XMLHttpRequest(); 
+var xmlhttp3 = new XMLHttpRequest();
+var url = "https://raw.githubusercontent.com/riderShigh/API2/master/statsCompare/5.11/103/champStats.json";
+var url2 = "https://raw.githubusercontent.com/riderShigh/API2/master/statsCompare/5.14/103/champStats.json";
+var url3 = "https://raw.githubusercontent.com/riderShigh/API2/master/bigItemNameIds.json";
+var url4 = "https://raw.githubusercontent.com/riderShigh/API2/master/pickDropStats/tallied/103.json";
+
+xmlhttp.onreadystatechange=function() {
+	if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	
+		xmlhttp2.onreadystatechange=function() {
+			if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
+			
+				xmlhttp4.onreadystatechange=function(){
+					if (xmlhttp4.readyState == 4 && xmlhttp4.status == 200){
+				//myFunction(xmlhttp2.responseText,"stats2");
+				//myFunction(xmlhttp.responseText,"stats");
+						plot(xmlhttp.responseText,xmlhttp2.responseText,xmlhttp4.responseText);
+
+						xmlhttp3.onreadystatechange=function() {
+							if (xmlhttp3.readyState == 4 && xmlhttp3.status == 200) {
+							
+
+
+										showItems(xmlhttp.responseText,xmlhttp2.responseText,xmlhttp3.responseText);
+								
+							}
+						}
+						
+						xmlhttp3.open("GET", url3, false);
+						xmlhttp3.send();
+						
+					}
+				}
+
+				xmlhttp4.open("GET", url4, false);
+				xmlhttp4.send();
+				
+			}
+		}
+		xmlhttp2.open("GET", url2, false);
+		xmlhttp2.send();
+		//myFunction(xmlhttp.responseText);
+	}
+}
+xmlhttp.open("GET", url, false);
+xmlhttp.send();
+
+function plot(response1,response2,response3){
+
+	var arr = JSON.parse(response1);
+	var arr2 = JSON.parse(response2);
+	var arr3 = JSON.parse(response3);
+	var oldavg = arr.gamesWon.avg/arr.gamesRecorded.avg*100;
+	var oldmains = arr.gamesWon.mains/arr.gamesRecorded.mains*100;
+	var newavg = arr2.gamesWon.avg/arr2.gamesRecorded.avg*100;
+	var newmains = arr2.gamesWon.mains/arr2.gamesRecorded.mains*100;
+	
+	google.setOnLoadCallback(drawStacked);
+	
+	function drawStacked() {
+      
+	  /*var data = google.visualization.arrayToDataTable([
+        ['Games Played', 'Wins', 'Loses',{role:'annotation'}],
+        ['5.11 Avg', arr.gamesWon.avg, arr.gamesRecorded.avg-arr.gamesWon.avg, oldavg.toString()],
+		['5.11 Mains', arr.gamesWon.mains, arr.gamesRecorded.mains-arr.gamesWon.mains, oldmains.toString()],
+		['5.14 Avg', arr2.gamesWon.avg, arr2.gamesRecorded.avg-arr2.gamesWon.avg, newavg.toString()],
+		['5.14 Mains', arr2.gamesWon.mains, arr2.gamesRecorded.mains-arr2.gamesWon.mains, newmains.toString()],
+		
+      ]);*/
+	  
+	  var tooltip0 = 'Win Rate = ' + pV(oldavg) + '%\n' + showSign(oldavg-newavg) + '% compared to 5.14';
+	  var tooltip1 = 'Win Rate = ' + pV(newavg) + '%\n' + showSign(newavg-oldavg) + '% compared to 5.11';
+	  var tooltip2 = 'Win Rate = ' + pV(oldmains) + '%\n' + showSign(oldmains-newmains) + '% compared to 5.14';
+	  var tooltip3 = 'Win Rate = ' + pV(newmains) + '%\n' + showSign(newmains-oldmains) + '% compared to 5.11';
+	  
+	  var data = google.visualization.arrayToDataTable([
+        ['Win Rate', '5.11',{role:'tooltip'},'5.14',{role:'tooltip'}],
+        ['Avg', oldavg, tooltip0, newavg,tooltip1],
+		['Mains', oldmains, tooltip2, newmains,tooltip3],
+	
+      ]);
+	  
+	  var view = new google.visualization.DataView(data);
+  
+
+      var options = {
+        title: 'Win Rate',
+        chartArea: {width: '62%'},
+        isStacked: false,
+		backgroundColor: { fill:'transparent' },
+		colors: ['#d95f02','#3b8686'],
+        hAxis: {
+          title: 'Win Rate (%)',
+          minValue: 0,
+        },
+        //vAxis: {
+        //  title: ''
+        //},
+		bar: { groupWidth: "20"},
+		width: 530,
+		height: 150
+      };
+      var chart = new google.visualization.BarChart(document.getElementById('gamesPlayed_chart'));
+      chart.draw(data, options);
+    }
+	
+	
+	google.setOnLoadCallback(drawPickDrop);
+	
+	function drawPickDrop() {
+		var data = google.visualization.arrayToDataTable([
+			['Pick up/Drop Rate', '%', {role:'style'}],
+			['Unchanged',arr3[1], 'blue'],
+			['Picked up',arr3[0], 'green'],
+			['Dropped',arr3[2], 'red']
+		]);
+
+        var options = {
+          title: 'Did a main pick up/drop a champion after Patch 5.13?',
+		  backgroundColor: { fill:'transparent' },
+          pieHole: 0.4,
+		  is3D: true,
+		  
+		  colors:['#3129b8', 'green', 'red']
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('pickDrop_chart'));
+        chart.draw(data, options);
+    }
+	
+	google.setOnLoadCallback(drawDPS);
+	
+	
+	function drawDPS() {
+    
+		var tt0 = "DPS = " + pV(arr.totalDamageDealt.win.avg) + "\n" + showSign(arr.totalDamageDealt.win.avg-arr2.totalDamageDealt.win.avg) + ' compared to 5.14';
+		var tt1 = "DPS = " + pV(arr.totalDamageDealt.lose.avg) + "\n" + showSign(arr.totalDamageDealt.lose.avg-arr2.totalDamageDealt.lose.avg) + ' compared to 5.14';
+		var tt2 = "DPS = " + pV(arr.totalDamageDealt.win.mains) + "\n" + showSign(arr.totalDamageDealt.win.mains-arr2.totalDamageDealt.win.mains) + ' compared to 5.14';
+		var tt3 = "DPS = " + pV(arr.totalDamageDealt.lose.mains) + "\n" + showSign(arr.totalDamageDealt.lose.mains-arr2.totalDamageDealt.lose.mains) + ' compared to 5.14';
+		var tt4 = "DPS = " + pV(arr2.totalDamageDealt.win.avg) + "\n" + showSign(arr2.totalDamageDealt.win.avg-arr.totalDamageDealt.win.avg) + ' compared to 5.11';
+		var tt5 = "DPS = " + pV(arr2.totalDamageDealt.lose.avg) + "\n" + showSign(arr2.totalDamageDealt.lose.avg-arr.totalDamageDealt.lose.avg) + ' compared to 5.11';
+		var tt6 = "DPS = " + pV(arr2.totalDamageDealt.win.mains) + "\n" + showSign(arr2.totalDamageDealt.win.mains-arr.totalDamageDealt.win.mains) + ' compared to 5.11';
+		var tt7 = "DPS = " + pV(arr2.totalDamageDealt.lose.mains) + "\n" + showSign(arr2.totalDamageDealt.lose.mains-arr.totalDamageDealt.lose.mains) + ' compared to 5.11';
+		
+		var data = google.visualization.arrayToDataTable([
+        ['DPS', 'winning',{role:'tooltip'}, 'losing',{role:'tooltip'}],
+        ['5.11 Avg', arr.totalDamageDealt.win.avg,tt0, arr.totalDamageDealt.lose.avg,tt1],
+		['5.11 Mains', arr.totalDamageDealt.win.mains,tt2, arr.totalDamageDealt.lose.mains,tt3],
+		['5.14 Avg', arr2.totalDamageDealt.win.avg,tt4, arr2.totalDamageDealt.lose.avg,tt5],
+		['5.14 Mains', arr2.totalDamageDealt.win.mains,tt6, arr2.totalDamageDealt.lose.mains,tt7],
+		
+      ]);
+
+      var options = {
+        title: 'Damage per Second (DPS)',
+        chartArea: {width: '62%'},
+        isStacked: false,
+		backgroundColor: { fill:'transparent' },
+        hAxis: {
+          title: 'DPS',
+          minValue: 0,
+        },
+        //vAxis: {
+        //  title: ''
+        //},
+		bar: { groupWidth: "20"},
+		width: 530,
+		height: 250
+      };
+      var chart = new google.visualization.BarChart(document.getElementById('dps_chart'));
+      chart.draw(data, options);
+    }	
+
+	
+	google.setOnLoadCallback(drawDPSChamps);
+	
+	function drawDPSChamps() {
+	
+		var tt0 = "DPS to Champs = " + pV(arr.totalDamageToChampions.win.avg) + "\n" + showSign(arr.totalDamageToChampions.win.avg-arr2.totalDamageToChampions.win.avg) + ' compared to 5.14';
+		var tt1 = "DPS to Champs = " + pV(arr.totalDamageToChampions.lose.avg) + "\n" + showSign(arr.totalDamageToChampions.lose.avg-arr2.totalDamageToChampions.lose.avg) + ' compared to 5.14';
+		var tt2 = "DPS to Champs = " + pV(arr.totalDamageToChampions.win.mains) + "\n" + showSign(arr.totalDamageToChampions.win.mains-arr2.totalDamageToChampions.win.mains) + ' compared to 5.14';
+		var tt3 = "DPS to Champs = " + pV(arr.totalDamageToChampions.lose.mains) + "\n" + showSign(arr.totalDamageToChampions.lose.mains-arr2.totalDamageToChampions.lose.mains) + ' compared to 5.14';
+		var tt4 = "DPS to Champs = " + pV(arr2.totalDamageToChampions.win.avg) + "\n" + showSign(arr2.totalDamageToChampions.win.avg-arr.totalDamageToChampions.win.avg) + ' compared to 5.11';
+		var tt5 = "DPS to Champs = " + pV(arr2.totalDamageToChampions.lose.avg) + "\n" + showSign(arr2.totalDamageToChampions.lose.avg-arr.totalDamageToChampions.lose.avg) + ' compared to 5.11';
+		var tt6 = "DPS to Champs = " + pV(arr2.totalDamageToChampions.win.mains) + "\n" + showSign(arr2.totalDamageToChampions.win.mains-arr.totalDamageToChampions.win.mains) + ' compared to 5.11';
+		var tt7 = "DPS to Champs = " + pV(arr2.totalDamageToChampions.lose.mains) + "\n" + showSign(arr2.totalDamageToChampions.lose.mains-arr.totalDamageToChampions.lose.mains) + ' compared to 5.11';	
+	
+      var data = google.visualization.arrayToDataTable([
+        ['DPS to Champs', 'winning', {role:'tooltip'}, 'losing', {role:'tooltip'}],
+        ['5.11 Avg', arr.totalDamageToChampions.win.avg, tt0, arr.totalDamageToChampions.lose.avg, tt1],
+		['5.11 Mains', arr.totalDamageToChampions.win.mains, tt2, arr.totalDamageToChampions.lose.mains, tt3],
+		['5.14 Avg', arr2.totalDamageToChampions.win.avg, tt4, arr2.totalDamageToChampions.lose.avg, tt5],
+		['5.14 Mains', arr2.totalDamageToChampions.win.mains, tt6, arr2.totalDamageToChampions.lose.mains, tt7],
+		
+      ]);
+
+      var options = {
+        title: 'Damage per Second to Champions',
+        chartArea: {width: '62%'},
+        isStacked: false,
+		backgroundColor: { fill:'transparent' },
+        hAxis: {
+          title: 'DPS to Champions',
+          minValue: 0,
+        },
+        //vAxis: {
+        //  title: ''
+        //},
+		bar: { groupWidth: "20"},
+		width: 530,
+		height: 250
+      };
+      var chart = new google.visualization.BarChart(document.getElementById('dpschamp_chart'));
+      chart.draw(data, options);
+    }		
+
+	google.setOnLoadCallback(drawCCPS);
+	
+	function drawCCPS() {
+	
+		var tt0 = "CCPS = " + pV(arr.totalTimeCrowdControlDealt.win.avg*100) + "%\n" + showSign((arr.totalTimeCrowdControlDealt.win.avg-arr2.totalTimeCrowdControlDealt.win.avg)*100) + ' compared to 5.14';
+		var tt1 = "CCPS = " + pV(arr.totalTimeCrowdControlDealt.lose.avg*100) + "%\n" + showSign((arr.totalTimeCrowdControlDealt.lose.avg-arr2.totalTimeCrowdControlDealt.lose.avg)*100) + ' compared to 5.14';
+		var tt2 = "CCPS = " + pV(arr.totalTimeCrowdControlDealt.win.mains*100) + "%\n" + showSign((arr.totalTimeCrowdControlDealt.win.mains-arr2.totalTimeCrowdControlDealt.win.mains)*100) + ' compared to 5.14';
+		var tt3 = "CCPS = " + pV(arr.totalTimeCrowdControlDealt.lose.mains*100) + "%\n" + showSign((arr.totalTimeCrowdControlDealt.lose.mains-arr2.totalTimeCrowdControlDealt.lose.mains)*100) + ' compared to 5.14';
+		var tt4 = "CCPS = " + pV(arr2.totalTimeCrowdControlDealt.win.avg*100) + "%\n" + showSign((arr2.totalTimeCrowdControlDealt.win.avg-arr.totalTimeCrowdControlDealt.win.avg)*100) + ' compared to 5.11';
+		var tt5 = "CCPS = " + pV(arr2.totalTimeCrowdControlDealt.lose.avg*100) + "%\n" + showSign((arr2.totalTimeCrowdControlDealt.lose.avg-arr.totalTimeCrowdControlDealt.lose.avg)*100) + ' compared to 5.11';
+		var tt6 = "CCPS = " + pV(arr2.totalTimeCrowdControlDealt.win.mains*100) + "%\n" + showSign((arr2.totalTimeCrowdControlDealt.win.mains-arr.totalTimeCrowdControlDealt.win.mains)*100) + ' compared to 5.11';
+		var tt7 = "CCPS = " + pV(arr2.totalTimeCrowdControlDealt.lose.mains*100) + "%\n" + showSign((arr2.totalTimeCrowdControlDealt.lose.mains-arr.totalTimeCrowdControlDealt.lose.mains)*100) + ' compared to 5.11';
+	
+      var data = google.visualization.arrayToDataTable([
+        ['CCPS', 'winning', {role:'tooltip'}, 'losing', {role:'tooltip'}],
+        ['5.11 Avg', arr.totalTimeCrowdControlDealt.win.avg*100, tt0, arr.totalTimeCrowdControlDealt.lose.avg*100, tt1],
+		['5.11 Mains', arr.totalTimeCrowdControlDealt.win.mains*100, tt2, arr.totalTimeCrowdControlDealt.lose.mains*100, tt3],
+		['5.14 Avg', arr2.totalTimeCrowdControlDealt.win.avg*100, tt4, arr2.totalTimeCrowdControlDealt.lose.avg*100, tt5],
+		['5.14 Mains', arr2.totalTimeCrowdControlDealt.win.mains*100, tt6, arr2.totalTimeCrowdControlDealt.lose.mains*100, tt7],
+		
+      ]);
+
+      var options = {
+        title: 'Percentage Game Time Dealing Crowd Control (CCPS)',
+        chartArea: {width: '62%'},
+        isStacked: false,
+		backgroundColor: { fill:'transparent' },
+        hAxis: {
+          title: 'CCPS (%)',
+          minValue: 0,
+        },
+        //vAxis: {
+        //  title: ''
+        //},
+		bar: { groupWidth: "20"},
+		width: 530,
+		height: 250
+      };
+      var chart = new google.visualization.BarChart(document.getElementById('ccps_chart'));
+      chart.draw(data, options);
+    }	
+	
+	google.setOnLoadCallback(drawKDA);
+	
+	function drawKDA() {
+	
+		var tt0 = "KDA = " + pV(arr.KDA.win.avg) + "\n" + showSign(arr.KDA.win.avg-arr2.KDA.win.avg) + ' compared to 5.14';
+		var tt1 = "KDA = " + pV(arr.KDA.lose.avg) + "\n" + showSign(arr.KDA.lose.avg-arr2.KDA.lose.avg) + ' compared to 5.14';
+		var tt2 = "KDA = " + pV(arr.KDA.win.mains) + "\n" + showSign(arr.KDA.win.mains-arr2.KDA.win.mains) + ' compared to 5.14';
+		var tt3 = "KDA = " + pV(arr.KDA.lose.mains) + "\n" + showSign(arr.KDA.lose.mains-arr2.KDA.lose.mains) + ' compared to 5.14';
+		var tt4 = "KDA = " + pV(arr2.KDA.win.avg) + "\n" + showSign(arr2.KDA.win.avg-arr.KDA.win.avg) + ' compared to 5.11';
+		var tt5 = "KDA = " + pV(arr2.KDA.lose.avg) + "\n" + showSign(arr2.KDA.lose.avg-arr.KDA.lose.avg) + ' compared to 5.11';
+		var tt6 = "KDA = " + pV(arr2.KDA.win.mains) + "\n" + showSign(arr2.KDA.win.mains-arr.KDA.win.mains) + ' compared to 5.11';
+		var tt7 = "KDA = " + pV(arr2.KDA.lose.mains) + "\n" + showSign(arr2.KDA.lose.mains-arr.KDA.lose.mains) + ' compared to 5.11';	
+	
+      var data = google.visualization.arrayToDataTable([
+        ['KDA', 'winning', {role:'tooltip'}, 'losing',{role:'tooltip'}],
+        ['5.11 Avg', arr.KDA.win.avg, tt0, arr.KDA.lose.avg, tt1],
+		['5.11 Mains', arr.KDA.win.mains, tt2, arr.KDA.lose.mains, tt3],
+		['5.14 Avg', arr2.KDA.win.avg, tt4, arr2.KDA.lose.avg, tt5],
+		['5.14 Mains', arr2.KDA.win.mains, tt6, arr2.KDA.lose.mains, tt7]
+		
+      ]);
+
+      var options = {
+        title: 'KDA',
+        chartArea: {width: '62%'},
+        isStacked: false,
+		backgroundColor: { fill:'transparent' },
+        hAxis: {
+          title: 'KDA',
+          minValue: 0,
+        },
+        //vAxis: {
+        //  title: ''
+        //},
+		bar: { groupWidth: "20"},
+		width: 530,
+		height: 250
+      };
+      var chart = new google.visualization.BarChart(document.getElementById('kda_chart'));
+      chart.draw(data, options);
+    }
+}
+
+function showItems(response1,response2,response3){
+	
+	var arr = [];
+	arr.push(JSON.parse(response1));
+	arr.push(JSON.parse(response2));
+	var itemList = JSON.parse(response3);
+	
+	/*var items511mains = arr['itemUsage']['mains'];
+	var items511avg = arr['itemUsage']['avg'];
+	var items514mains = arr2['itemUsage']['mains'];
+	var items514avg = arr2['itemUsage']['avg'];*/
+	
+	var patch = ['5.11','5.14'];
+	var patch1 = ['511','514'];
+	var type = ['mains','avg'];
+	var type1 = ['Mains','Avg'];
+	//var stringThis = 'itemUsage_'+ type1[0] + patch1[0].toString();
+	//document.getElementById('itemUsage_'+ type1[0] + patch1[0].toString()).innerHTML = stringThis;
+	
+	for(var a1=0; a1<2; a1++){
+		for(var a2=0; a2<2; a2++){
+			var newList = {};
+			//var outsome = '';
+			for(var keyA in arr[a2]['itemUsage'][type[a1]]){
+				if(arr[a2]['itemUsage'][type[a1]].hasOwnProperty(keyA)){
+					for(var keyB in itemList['na'][patch[a2]]){
+						if(itemList['na'][patch[a2]].hasOwnProperty(keyB.toString())){
+							//document.getElementById('tth').innerHTML = key;
+							if(keyA==itemList['na'][patch[a2]][keyB]){
+								newList[keyB.toString()] = arr[a2]['itemUsage'][type[a1]][keyA];
+								//outsome += keyB.toString() + '  ';
+							}
+						}
+					}
+				}
+			}
+			
+			//document.getElementById('header').innerHTML = outsome;
+			
+			var sortable = [];
+			for(var keyC in newList){sortable.push([keyC, newList[keyC]]);}
+			sortable.sort(function(a, b) {return b[1] - a[1]});
+			
+			var outA = '<table><tr>';
+			for(var k=0; k<6; k++){
+				var itemUrl = 'http://ddragon.leagueoflegends.com/cdn/' + patch[a2].toString() + '.1/img/item/' + sortable[k][0].toString() + '.png';
+				outA += "<td><img src=" + itemUrl + " width='50px'></img></td>";
+
+			}
+			outA += '</tr><tr>';
+			for(var k=0; k<6; k++){
+				var itemUrl = 'http://ddragon.leagueoflegends.com/cdn/' + patch[a2].toString() + '.1/img/item/' + sortable[k][0].toString() + '.png';
+				var thisUsage = sortable[k][1]*100;
+				thisUsage = thisUsage.toFixed(2);
+				outA += '<td>' + thisUsage.toString() + "% </td>";
+			}			
+			outA += '</table>';
+			
+			document.getElementById('itemUsage_'+ type1[a1] + patch1[a2].toString()).innerHTML = outA;
+		}
+	}
+	
+}
+
+function showSign(value){
+	var str = '';
+	if(value > 0){ str = "+" + value.toFixed(2).toString();}
+	else{str = value.toFixed(2).toString();}
+	return str;
+}
+
+function pV(value){
+	return value.toFixed(2).toString();
+}
+
+</script>
+
+
+<footer>
+<div id='footer'></div>
+</footer>
+</div>
+</div>
+</div>
+
+<script>
+$(function(){
+$(#hs_all).trigger('click');
+});
+</script>
+
+</body>
+
+</html>
