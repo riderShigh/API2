@@ -78,6 +78,9 @@ span.itemUsage{
 	background-color: rgba(255,255,255,1);
 	text-align: left;
 }
+div.pickDrop_chart{
+	height: 700px;
+}
 </style>
 
 <!--div.textwrap{
@@ -197,7 +200,7 @@ function loadItems(response){
 <button id="hs_hideall">Hide All</button>
 </div>
 <p></p>
-<div id="pickDrop_chart" style="display:block"></div>
+<div id="pickDrop_chart" style="display:block; height:250px"></div>
 <div id="gamesPlayed_chart" style="display:block"></div>
 <div id="kda_chart" style="display:none"></div>
 <div id="dps_chart" style="display:none"></div>
@@ -334,17 +337,19 @@ function plot(response1,response2,response3){
 	
 	function drawPickDrop() {
 		var data = google.visualization.arrayToDataTable([
-			['Pick up/Drop Rate', '%'],
-			['Unchanged',arr3[1]],
-			['Picked up',arr3[0]],
-			['Dropped',arr3[2]]
+			['Pick up/Drop Rate', '%', {role:'style'}],
+			['Unchanged',arr3[1], 'blue'],
+			['Picked up',arr3[0], 'green'],
+			['Dropped',arr3[2], 'red']
 		]);
 
         var options = {
-          title: 'Did a summoner pick up/ drop a champion after Patch 5.13?',
+          title: 'Did a main pick up/drop a champion after Patch 5.13?',
 		  backgroundColor: { fill:'transparent' },
           pieHole: 0.4,
-		  is3D: true
+		  is3D: true,
+		  
+		  colors:['#3129b8', 'green', 'red']
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('pickDrop_chart'));
