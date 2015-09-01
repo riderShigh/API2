@@ -19,8 +19,8 @@ for key,value in mageList.iteritems():
 	print champName;
 
 	writeText = baseText.replace('Katarina',champName);
-
 	writeText = writeText.replace('/1/champStats.json','/'+key+'/champStats.json');
+	writeText = writeText.replace('/tallied/1.json','/tallied/'+key+'.json');
 
 	fGenHtml = open('./html/'+champName+'.html','w');
 	fGenHtml.write(writeText);

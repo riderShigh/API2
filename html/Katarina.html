@@ -116,12 +116,17 @@ $(document).ready(function(){
         $("#itemTable").toggle('show');
     });
 	
+    $("#hs_pickDrop").click(function(){
+        $("#pickDrop_chart").toggle('show');
+    });
+	
 	$("#hs_showall").click(function(){
 		$("#gamesPlayed_chart").show('show');
 		$("#dps_chart").show('show');
 		$("#dpschamp_chart").show('show');
 		$("#ccps_chart").show('show');
 		$("#kda_chart").show('show');
+		$("#pickDrop_chart").show('show');
 		$("#itemTable").show('show');
     });
 	
@@ -131,6 +136,7 @@ $(document).ready(function(){
 		$("#dpschamp_chart").hide('show');
 		$("#ccps_chart").hide('show');
 		$("#kda_chart").hide('show');
+		$("#pickDrop_chart").hide('show');
 		$("#itemTable").hide('show');
     });
 });
@@ -179,19 +185,21 @@ function loadItems(response){
 <br>
 </div>
 
+<button id="hs_pickDrop">Pick/Drop</button>
 <button id="hs_gamesPlayed">Win Rate</button>
 <button id="hs_kda">KDA</button>
 <button id="hs_dps">DPS</button>
 <button id="hs_dpschamp">DPS to Champions</button>
-<button id="hs_ccps">Crowd Control Duration</button>
 <div>
+<button id="hs_ccps">Crowd Control Duration</button>
 <button id="hs_items">Item Popularity</button>
 <button id="hs_showall">Show All</button>
 <button id="hs_hideall">Hide All</button>
 </div>
-
+<p></p>
+<div id="pickDrop_chart" style="display:block"></div>
 <div id="gamesPlayed_chart" style="display:block"></div>
-<div id="kda_chart" style="display:block"></div>
+<div id="kda_chart" style="display:none"></div>
 <div id="dps_chart" style="display:none"></div>
 <div id="dpschamp_chart" style="display:none"></div>
 <div id="ccps_chart" style="display:none"></div>
@@ -213,30 +221,44 @@ function loadItems(response){
 <script type='text/javascript'>
 google.load('visualization', '1', {packages: ['corechart', 'bar']});
 var xmlhttp = new XMLHttpRequest();
-var xmlhttp2 = new XMLHttpRequest(); 
+var xmlhttp2 = new XMLHttpRequest();
+var xmlhttp4 = new XMLHttpRequest(); 
 var xmlhttp3 = new XMLHttpRequest();
 var url = "https://raw.githubusercontent.com/riderShigh/API2/master/statsCompare/5.11/55/champStats.json";
 var url2 = "https://raw.githubusercontent.com/riderShigh/API2/master/statsCompare/5.14/55/champStats.json";
 var url3 = "https://raw.githubusercontent.com/riderShigh/API2/master/bigItemNameIds.json";
+var url4 = "https://raw.githubusercontent.com/riderShigh/API2/master/pickDropStats/tallied/55.json";
 
 xmlhttp.onreadystatechange=function() {
 	if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 	
 		xmlhttp2.onreadystatechange=function() {
 			if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
+			
+				xmlhttp4.onreadystatechange=function(){
+					if (xmlhttp4.readyState == 4 && xmlhttp4.status == 200){
 				//myFunction(xmlhttp2.responseText,"stats2");
 				//myFunction(xmlhttp.responseText,"stats");
-				plot(xmlhttp.responseText,xmlhttp2.responseText);
+						plot(xmlhttp.responseText,xmlhttp2.responseText,xmlhttp4.responseText);
 
-				xmlhttp3.onreadystatechange=function() {
-					if (xmlhttp3.readyState == 4 && xmlhttp3.status == 200) {
-					
-						showItems(xmlhttp.responseText,xmlhttp2.responseText,xmlhttp3.responseText);
+						xmlhttp3.onreadystatechange=function() {
+							if (xmlhttp3.readyState == 4 && xmlhttp3.status == 200) {
+							
+
+
+										showItems(xmlhttp.responseText,xmlhttp2.responseText,xmlhttp3.responseText);
+								
+							}
+						}
+						
+						xmlhttp3.open("GET", url3, false);
+						xmlhttp3.send();
+						
 					}
 				}
 
-				xmlhttp3.open("GET", url3, false);
-				xmlhttp3.send();
+				xmlhttp4.open("GET", url4, false);
+				xmlhttp4.send();
 				
 			}
 		}
@@ -248,10 +270,11 @@ xmlhttp.onreadystatechange=function() {
 xmlhttp.open("GET", url, false);
 xmlhttp.send();
 
-function plot(response1,response2){
+function plot(response1,response2,response3){
 
 	var arr = JSON.parse(response1);
 	var arr2 = JSON.parse(response2);
+	var arr3 = JSON.parse(response3);
 	var oldavg = arr.gamesWon.avg/arr.gamesRecorded.avg*100;
 	var oldmains = arr.gamesWon.mains/arr.gamesRecorded.mains*100;
 	var newavg = arr2.gamesWon.avg/arr2.gamesRecorded.avg*100;
@@ -304,6 +327,28 @@ function plot(response1,response2){
       };
       var chart = new google.visualization.BarChart(document.getElementById('gamesPlayed_chart'));
       chart.draw(data, options);
+    }
+	
+	
+	google.setOnLoadCallback(drawPickDrop);
+	
+	function drawPickDrop() {
+		var data = google.visualization.arrayToDataTable([
+			['Pick up/Drop Rate', '%'],
+			['Unchanged',arr3[1]],
+			['Picked up',arr3[0]],
+			['Dropped',arr3[2]]
+		]);
+
+        var options = {
+          title: 'Did a summoner pick up/ drop a champion after Patch 5.13?',
+		  backgroundColor: { fill:'transparent' },
+          pieHole: 0.4,
+		  is3D: true
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('pickDrop_chart'));
+        chart.draw(data, options);
     }
 	
 	google.setOnLoadCallback(drawDPS);
