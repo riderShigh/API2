@@ -43,7 +43,7 @@ h1{
 }
 
 div.background{
-	background-image: url(http://na.leagueoflegends.com/sites/default/files/upload/art/promoart_2_1920x1080.jpg) ;
+	background-image: url(https://github.com/riderShigh/API2/blob/master/promoart_2_1920x1080.jpg?raw=true) ;
 	background-repeat: no-repeat;
 	background-size: ;
 	box-shadow: inset 0px 0px 100px 100px rgba(0,0,0,1);
@@ -85,12 +85,18 @@ div.content{
 	margin-right: 50px;
 	display: block;
 }
-img.neural_chart1{
+div.neural_chart{
+	margin-top: 18px;
+	text-align: center;
+}
+div.neural_chart2{
+	margin-top: 18px;
 	text-align: center;
 }
 div.champ_pca{
 	margin-top: 18px;
 	margion-bottom: 18px;
+	text-align: center;
 }
 </style>
 
@@ -150,11 +156,28 @@ Therefore, those on the upper echelon will be considered as a main. Oh and yes, 
 Picking Up and Dropping Champions
 </h3>
 
-This is a bit more complicated than extracting the other stats, which are directly accessible from API raw data (Ok I get it, some do take doing a division, so that technically doesn't count as direct).
+This is a bit more complicated than extracting the other stats, which are directly accessible from API raw data (Ok I get it, some do take doing a division, so that technically doesn't count as direct). 
+Again this comes down to questioning how we quantify "picking up" and "dropping". Apparently PCA is not a good choice to analyze this, so we let's direct ourselves to artificial neural networks.
+<br>
 
-<div class=neural_chart>
-<img src='https://raw.githubusercontent.com/riderShigh/API2/master/neural_plot.PNG' style='border:none' opacity='1.0' id='neural_chart1'></img>
-<p id='midFrame'> </p>
+A simple thing to look at is the number of games a summoner played on a champion during time windows before and after the patch change. In particular we looked at 3 patches before and after.
+The following plot shows the number of games played during patch 5.13-5.15 (Weight 2) versus that of patch 5.10-5.12 (Weight 1).
+
+
+<div class='neural_chart'>
+<img src='https://raw.githubusercontent.com/riderShigh/API2/master/neural_plot.PNG' style='border:none' opacity='1.0' id='neural_chart1' width=640px></img>
+</div>
+
+Overlaying on the data points is a trained self-organizing map. This is generated using the Matlab Neural Net Clustering add-on. We can use this result to identify 3 regions:
+
+<ul>
+	<li>Green: Most possibly picked up the champion;</li>
+	<li>Red: Most probably dropped a champion; and</li>
+	<li>Blue: Unaffected, hard to tell, maybe, etc. For simplicity let's just call this unchanged.</li>
+</ul>
+
+<div class='neural_chart2'>
+<img src='https://raw.githubusercontent.com/riderShigh/API2/master/neural_plot_colored.JPG' style='border:none' opacity='1.0' id='neural_chart2' width=640px></img>
 </div>
 
 </div>
