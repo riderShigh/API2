@@ -45,8 +45,8 @@ h1{
 div.background{
 	background-image: url(http://na.leagueoflegends.com/sites/default/files/upload/art/promoart_2_1920x1080.jpg) ;
 	background-repeat: no-repeat;
-	background-size: cover;
-	box-shadow: inset 0px 0px 15px 15px rgba(0,0,0,1);
+	background-size: ;
+	box-shadow: inset 0px 0px 100px 100px rgba(0,0,0,1);
 	margin-top: 0px;
 	background-attachment: fixed;
 }
@@ -58,11 +58,9 @@ div.transbox{
 	box-shadow: 0px 0px 15px 15px rgba(0,0,0,1);
 }
 div.pseudobox{
-	margin-left: 97px;
 	background-color: rgba(255,255,255,0);
 }
 div.pseudobox2{
-	margin-left: 325px;
 	text-align: center;
 	background-color: rgba(255,255,255,0);
 	<!--background-color: #000000;-->
@@ -80,6 +78,19 @@ span.itemUsage{
 }
 div.pickDrop_chart{
 	height: 700px;
+}
+div.content{
+	text-align:left;
+	margin-left: 50px;
+	margin-right: 50px;
+	display: block;
+}
+img.neural_chart1{
+	text-align: center;
+}
+div.champ_pca{
+	margin-top: 18px;
+	margion-bottom: 18px;
 }
 </style>
 
@@ -104,11 +115,47 @@ div.pickDrop_chart{
 <div id='header'>
 <p id='tth'></p>
 </div>
-<div id='loadingPic'>
-<h1>Katarina</h1>
-<img src='http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Katarina_0.jpg' style='border:none' opacity='1.0'></img>
-<p id='midFrame'> </p>
+<div class='content'>
+<h1>Methods</h1>
 
+<h2>Identifying Who Mains What</h2>
+
+Let's define this a little bit better: We want to find who mains a champion, or could potentially be a good player of a champion. This summoner is what we will call a "Main".
+<br>
+There is no clear-cut universal definition of when you would say someone mains Veigar. Maybe he played 500 games on it. Maybe he consistently dealt a ton of damage during every match he played. These criteria, however, might not translate across champions well.
+You won't expect Lulu to be dealing the same damage to champions as if she were Viktor. In order to define a reasonable metric to evaluate the performance of a summoner, we looked at the following numbers on a specific champion, adjusting how we weigh them on a champion-by-champion basis:
+<ul>
+	<li>Number of games played;</li>
+	<li>Win rate;</li>
+	<li>Play rate compared to other chamions;</li>
+	<li>Number of Kills;</li>
+	<li>Number of Assists; and</li>
+	<li>KDA.</li>
+</ul>
+
+After all of these numbers are loaded, we perform principle component analysis on them (<a href='https://en.wikipedia.org/wiki/Principal_component_analysis'>Wikipedia:PCA</a>). Here is one that is done for Nidalee:
+<br>
+<div class='champ_pca'>
+<img src='https://raw.githubusercontent.com/riderShigh/API2/master/champ_pca.png' style='border:none' opacity='1.0' id='neural_chart1' width=640px></img>
+</div>
+
+Each point is an analyzed set of data from one summoner.
+Close to the three corners of the spread, you should see dots indicating the players with the highest KDA, most number of games played on Nidalee, and that poor guy with the lowest KDA.
+It is interesting to note the summoner with the highest KDA is not at the very edge of the blob, due to how the details go for our PCA and is complete normal.
+Empirically principle component 1 (PC1) appears to be sufficient to identify who is good on this champion.
+Therefore, those on the upper echelon will be considered as a main. Oh and yes, all of them are platinum+ players. 
+
+
+<h3>
+Picking Up and Dropping Champions
+</h3>
+
+This is a bit more complicated than extracting the other stats, which are directly accessible from API raw data (Ok I get it, some do take doing a division, so that technically doesn't count as direct).
+
+<div class=neural_chart>
+<img src='https://raw.githubusercontent.com/riderShigh/API2/master/neural_plot.PNG' style='border:none' opacity='1.0' id='neural_chart1'></img>
+<p id='midFrame'> </p>
+</div>
 
 </div>
 
